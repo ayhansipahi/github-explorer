@@ -54,3 +54,30 @@ export type Plan = {
   private_repos: number;
   space: number;
 };
+
+/**
+ * GitHub API Error Response
+ */
+export type GitHubErrorResponse = {
+  message: string;
+  documentation_url?: string;
+  status?: string;
+};
+
+/**
+ * Type guard to check if response is a UserResponse
+ */
+export function isUserResponse(
+  response: UserResponse | GitHubErrorResponse
+): response is UserResponse {
+  return 'login' in response && 'id' in response;
+}
+
+/**
+ * Type guard to check if response is an error
+ */
+export function isErrorResponse(
+  response: UserResponse | GitHubErrorResponse
+): response is GitHubErrorResponse {
+  return 'message' in response && !('login' in response);
+}

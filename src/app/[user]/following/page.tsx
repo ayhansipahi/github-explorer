@@ -1,6 +1,7 @@
 import { Separator } from '@/components/ui/separator';
 import { getFollowing } from '@/lib/api/getFollowing';
 import { getUser } from '@/lib/api/getUser';
+import { isUserResponse } from '@/lib/api/getUser.types';
 import UserCard from '@/components/UserCard/UserCard';
 import Pagination from '@/components/Pagination/Pagination';
 
@@ -20,10 +21,24 @@ export default async function Page({ params, searchParams }: Props) {
   const per_page = parseInt(searchParams.per_page || '30');
 
   try {
-    const [following, userProfile] = await Promise.all([
+    const [following, userProfileResponse] = await Promise.all([
       getFollowing(user, page, per_page),
       getUser(user),
     ]);
+
+    if (!isUserResponse(userProfileResponse)) {
+      return (
+        <div className='my-4 text-center'>
+          <h1 className='text-xl font-semibold mb-2'>Error</h1>
+          <Separator className='my-4' />
+          <p className='text-red-500'>
+            {userProfileResponse.message || 'User not found'}
+          </p>
+        </div>
+      );
+    }
+
+    const userProfile = userProfileResponse;
 
     return (
       <div className='my-4'>

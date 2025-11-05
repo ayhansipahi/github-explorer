@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { ReactNode } from 'react';
 
 import { getUser } from '@/lib/api/getUser';
+import { isUserResponse } from '@/lib/api/getUser.types';
 import { UserNavigationMenu } from '@/components/UserNavigation/UserNavigation';
 import UserProfile from '@/components/UserProfile/UserProfile';
 
@@ -14,11 +15,13 @@ interface Props {
 
 export default async function UserLayout({ children, params }: Props) {
   const { user } = params;
-  const profile = await getUser(user);
+  const profileResponse = await getUser(user);
 
-  if (!profile) {
+  if (!isUserResponse(profileResponse)) {
     return notFound();
   }
+
+  const profile = profileResponse;
 
   return (
     <div className='container mx-auto flex flex-col gap-10 py-4 md:flex-row'>
