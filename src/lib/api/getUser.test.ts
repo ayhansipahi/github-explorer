@@ -1,20 +1,24 @@
 import { getUser } from './getUser';
+import { isUserResponse, isErrorResponse } from './getUser.types';
 
 global.fetch = jest.fn().mockResolvedValue(
   Promise.resolve({
     ok: true,
-    json: () => ({ login: 'octocat' }),
+    json: () => ({ login: 'octocat', id: 1 }),
   })
 );
 
 describe('getUser', () => {
   it('should return user data for a valid username', async () => {
     const username = 'octocat';
-    const user = await getUser(username);
-    expect(user.login).toEqual(username);
+    const response = await getUser(username);
+    expect(isUserResponse(response)).toBe(true);
+    if (isUserResponse(response)) {
+      expect(response.login).toEqual(username);
+    }
   });
 
-  it('should throw an error for an invalid username', async () => {
+  it('should return error response for an invalid username', async () => {
     global.fetch = jest.fn().mockResolvedValue(
       Promise.resolve({
         ok: false,
@@ -22,8 +26,10 @@ describe('getUser', () => {
       })
     );
     const username = 'invalid_username';
-    const user = await getUser(username);
-    expect(user.login).not.toEqual(username);
-    expect(user?.message).toEqual('Not Found');
+    const response = await getUser(username);
+    expect(isErrorResponse(response)).toBe(true);
+    if (isErrorResponse(response)) {
+      expect(response.message).toEqual('Not Found');
+    }
   });
 });
