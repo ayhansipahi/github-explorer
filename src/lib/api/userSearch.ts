@@ -5,13 +5,12 @@ export const searchUsers = async (
   query: string,
   signal?: AbortSignal
 ): Promise<UserSearchResult> => {
-  const response = await fetch(
-    `https://api.github.com/search/users?q=${query}`,
-    {
-      ...options,
-      signal,
-    }
-  );
+  const url = new URL('https://api.github.com/search/users');
+  url.searchParams.append('q', query);
+  const response = await fetch(url.toString(), {
+    ...options,
+    signal,
+  });
   return response.json();
 };
 

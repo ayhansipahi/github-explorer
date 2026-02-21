@@ -13,11 +13,11 @@ export type SearchResultTextMatches = {
 
 export interface RepoSearchFail {
   message: string
-  errors: Error[]
+  errors: RepoSearchError[]
   documentation_url: string
 }
 
-export interface Error {
+export interface RepoSearchError {
   message: string
   resource: string
   field: string

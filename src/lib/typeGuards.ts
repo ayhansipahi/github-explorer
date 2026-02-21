@@ -3,5 +3,5 @@ export function isString(test: unknown): test is string {
 }
 
 export function isConvertableNumber(test: unknown): test is string {
-  return !isNaN(Number(test));
+  return typeof test === 'string' && test.trim() !== '' && !isNaN(Number(test));
 }
