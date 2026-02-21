@@ -1,18 +1,6 @@
-import /**
- * Component for rendering a list of items using React.
- * @module ListComponent
- */
-React from 'react';
-import /**
- * This class represents a person.
- * It contains properties and methods related to a person.
- */
-Link from 'next/link';
-import /**
- * Represents an Image object.
- * @class
- */
-Image from 'next/image';
+import React from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Header() {
   return (

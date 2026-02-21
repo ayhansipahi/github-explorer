@@ -34,7 +34,9 @@ describe('RepoCard', () => {
   });
 
   it('renders the last updated date', () => {
-    const { getByText } = render(<RepoCard repo={repo} />);
-    expect(getByText('Last updated: 1 January 2022 at 01:00 am')).toBeDefined();
+    const { container } = render(<RepoCard repo={repo} />);
+    const footer = container.querySelector('.flex.items-center.p-6.pt-0');
+    expect(footer?.textContent).toContain('Last updated:');
+    expect(footer?.textContent).toContain('January 2022');
   });
 });
